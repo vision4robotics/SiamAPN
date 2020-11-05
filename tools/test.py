@@ -13,13 +13,13 @@ import numpy as np
 
 from pysot.core.config import cfg
 from pysot.models.model_builder import ModelBuilder
-from pysot.tracker.dsiamrpn_tracker import DSiamRPNTracker
+from pysot.tracker.siamapn_tracker import SiamAPNTracker
 from pysot.utils.bbox import get_axis_aligned_bbox
 from pysot.utils.model_load import load_pretrain
 from toolkit.datasets import DatasetFactory
 
 
-parser = argparse.ArgumentParser(description='siamrpn tracking')
+parser = argparse.ArgumentParser(description='siamapn tracking')
 parser.add_argument('--dataset', default='UAV10',type=str,
         help='datasets')
 parser.add_argument('--config', default='./../experiments/config.yaml', type=str,
@@ -47,7 +47,7 @@ def main():
     model = load_pretrain(model, args.snapshot).cuda().eval()
 
     # build tracker
-    tracker = DSiamRPNTracker(model)
+    tracker = SiamAPNTracker(model)
 
     # create dataset
     dataset = DatasetFactory.create_dataset(name=args.dataset,

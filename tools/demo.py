@@ -14,7 +14,7 @@ from glob import glob
 
 from pysot.core.config import cfg
 from pysot.models.model_builder import ModelBuilder
-from pysot.tracker.siamcar_tracker import SiamCARTracker
+from pysot.tracker.siamapn_tracker import SiamAPNTracker
 from pysot.utils.model_load import load_pretrain
 
 torch.set_num_threads(1)
@@ -68,7 +68,7 @@ def main():
     model = load_pretrain(model, args.snapshot).eval().to(device)
 
     # build tracker
-    tracker = SiamCARTracker(model, cfg.TRACK)
+    tracker = SiamAPNTracker(model, cfg.TRACK)
 
     hp = {'lr': 0.3, 'penalty_k': 0.04, 'window_lr': 0.4}
 

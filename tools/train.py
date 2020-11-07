@@ -107,43 +107,6 @@ def build_opt_lr(model, current_epoch=0):
     return optimizer, lr_scheduler
 
 
-def log_grads(model, tb_writer, tb_index):
-    def weights_grads(model):
-        grad = {}
-        weights = {}
-        for name, param in model.named_parameters():
-            if param.grad is not None:
-                grad[name] = param.grad
-                weights[name] = param.data
-        return grad, weights
-
-    grad, weights = weights_grads(model)
-    feature_norm, car_norm = 0, 0
-    for k, g in grad.items():
-        _norm = g.data.norm(2)
-        weight = weights[k]
-        w_norm = weight.norm(2)
-        if 'feature' in k:
-            feature_norm += _norm ** 2
-        else:
-            car_norm += _norm ** 2
-
-        tb_writer.add_scalar('grad_all/'+k.replace('.', '/'),
-                             _norm, tb_index)
-        tb_writer.add_scalar('weight_all/'+k.replace('.', '/'),
-                             w_norm, tb_index)
-        tb_writer.add_scalar('w-g/'+k.replace('.', '/'),
-                             w_norm/(1e-20 + _norm), tb_index)
-    tot_norm = feature_norm + car_norm
-    tot_norm = tot_norm ** 0.5
-    feature_norm = feature_norm ** 0.5
-    car_norm = car_norm ** 0.5
-
-    tb_writer.add_scalar('grad/tot', tot_norm, tb_index)
-    tb_writer.add_scalar('grad/feature', feature_norm, tb_index)
-    tb_writer.add_scalar('grad/car', car_norm, tb_index)
-
-
 def train(train_loader, model, optimizer, lr_scheduler, tb_writer):
     cur_lr = lr_scheduler.get_cur_lr()
     rank = get_rank()
@@ -207,9 +170,6 @@ def train(train_loader, model, optimizer, lr_scheduler, tb_writer):
             optimizer.zero_grad()
             loss.backward()
             reduce_gradients(model)
-
-            if rank == 0 and cfg.TRAIN.LOG_GRADS:
-                log_grads(model.module, tb_writer, tb_idx)
 
             # clip gradient
             clip_grad_norm_(model.parameters(), cfg.TRAIN.GRAD_CLIP)

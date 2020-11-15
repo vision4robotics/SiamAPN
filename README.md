@@ -8,7 +8,7 @@ pip install -r requirements.txt
 ```
 
 ## 2. Test
-Download pretrained model: [general_model](https://pan.baidu.com/s/1GSgj3UwObcUKyT8TFSJ5qA)(code:w3u5) and put it into `tools/snapshot` directory.
+Download pretrained model (epoch=37) : [general_model](https://pan.baidu.com/s/1GSgj3UwObcUKyT8TFSJ5qA)(code:w3u5) and put it into `tools/snapshot` directory.
 
 Download testing datasets and put them into `test_dataset` directory. If you want to test the tracker on a new dataset, please refer to [pysot-toolkit](https://github.com/StrangerZhang/pysot-toolkit) to set test_dataset.
 

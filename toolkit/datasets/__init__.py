@@ -4,11 +4,12 @@ from .visdrone1 import VISDRONED2018Dataset
 class DatasetFactory(object):
     @staticmethod
     def create_dataset(**kwargs):
-        """
+
 
         assert 'name' in kwargs, "should provide dataset name"
         name = kwargs['name']
-        if 'UAV10fps' in name:
+        
+        if 'UAV10' in name:
             dataset = UAV10Dataset(**kwargs)
         elif 'UAV20l' in name:
             dataset = UAV20Dataset(**kwargs)

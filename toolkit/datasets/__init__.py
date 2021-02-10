@@ -10,7 +10,7 @@ class DatasetFactory(object):
         assert 'name' in kwargs, "should provide dataset name"
         name = kwargs['name']
         
-        if 'UAV10' in name:
+        if 'UAV123_10fps' in name:
             dataset = UAV10Dataset(**kwargs)
         elif 'UAV20l' in name:
             dataset = UAV20Dataset(**kwargs)

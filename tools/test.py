@@ -20,7 +20,7 @@ from toolkit.datasets import DatasetFactory
 
 
 parser = argparse.ArgumentParser(description='siamapn tracking')
-parser.add_argument('--dataset', default='UAV10',type=str,
+parser.add_argument('--dataset', default='UAV123_10fps',type=str,
         help='datasets')
 parser.add_argument('--config', default='./../experiments/config.yaml', type=str,
         help='config file')

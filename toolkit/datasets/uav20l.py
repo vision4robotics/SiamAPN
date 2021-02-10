@@ -96,7 +96,7 @@ class UAV20Dataset(Dataset):
         for video in pbar:
             pbar.set_postfix_str(video)
             self.videos[video] = UAVVideo(video,
-                                          dataset_root,
+                                          dataset_root+'/data_seq',
                                           meta_data[video]['video_dir'],
                                           meta_data[video]['init_rect'],
                                           meta_data[video]['img_names'],

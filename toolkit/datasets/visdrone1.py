@@ -95,7 +95,7 @@ class VISDRONED2018Dataset(Dataset):
         for video in pbar:
             pbar.set_postfix_str(video)
             self.videos[video] = UVADTVideo(video,
-                                          dataset_root,
+                                          dataset_root+'/sequences',
                                           meta_data[video]['video_dir'],
                                           meta_data[video]['init_rect'],
                                           meta_data[video]['img_names'],

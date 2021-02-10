@@ -101,6 +101,22 @@ __C.TRAIN.GRAD_CLIP = 10.0
 
 __C.TRAIN.BASE_LR = 0.005
 
+__C.TRAIN.locthreshold1 = 0.72
+
+__C.TRAIN.locthreshold2 = 0.45
+
+__C.TRAIN.clsthreshold1 = 0.8
+
+__C.TRAIN.clsthreshold2 = 0.5
+
+__C.TRAIN.labelcls2range = 4
+
+__C.TRAIN.weightcls3range = 4
+
+__C.TRAIN.weightxffrange = 3
+
+__C.TRAIN.weightcls3low = 0.2
+
 __C.TRAIN.LR = CN()
 
 __C.TRAIN.LR.TYPE = 'log'
@@ -227,16 +243,16 @@ __C.TRACK.TYPE = 'SiamAPNtracker'
 __C.TRACK.PENALTY_K = 0.04
 
 # Window influence
-__C.TRACK.WINDOW_INFLUENCE = 0.44
+__C.TRACK.WINDOW_INFLUENCE = 0.4364
 
 # Interpolation learning rate
-__C.TRACK.LR = 0.4
+__C.TRACK.LR = 0.302
 
 __C.TRACK.w1=1.2 
 
 __C.TRACK.w2=1.0
 
-__C.TRACK.w3=1.6 
+__C.TRACK.w3=1.0 
 
 __C.TRACK.LARGER=1.4
 # Exemplar size

@@ -70,7 +70,6 @@ def main():
     # build tracker
     tracker = SiamAPNTracker(model, cfg.TRACK)
 
-    hp = {'lr': 0.3, 'penalty_k': 0.04, 'window_lr': 0.4}
 
     first_frame = True
     if args.video_name:
@@ -87,7 +86,7 @@ def main():
             tracker.init(frame, init_rect)
             first_frame = False
         else:
-            outputs = tracker.track(frame, hp)
+            outputs = tracker.track(frame)
             bbox = list(map(int, outputs['bbox']))
             cv2.rectangle(frame, (bbox[0], bbox[1]),
                           (bbox[0]+bbox[2], bbox[1]+bbox[3]),

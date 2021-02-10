@@ -9,20 +9,18 @@ from glob import glob
 from .dataset import Dataset
 from .video import Video
 
-
-def loaddata():
-    
-    path='./test_dataset/UAV123_20L'
+def ca():
+    path='./test_dataset/V4RFlight112'
     
     name_list=os.listdir(path+'/data_seq')
     name_list.sort()
-    
+    a=len(name_list)
     b=[]
-    for i in range(len(name_list)):
+    for i in range(a):
         b.append(name_list[i])
     c=[]
     
-    for jj in range(len(name_list)):
+    for jj in range(a):
         imgs=path+'/data_seq/'+str(name_list[jj])
         txt=path+'/anno/'+str(name_list[jj])+'.txt'
         bbox=[]
@@ -31,9 +29,18 @@ def loaddata():
         li=os.listdir(imgs)
         li.sort()
         for ii in range(len(file)):
-            li[ii]=name_list[jj]+'/'+li[ii]
-    
-            line = file[ii].strip('\n').split(',')
+            try:
+                li[ii]=name_list[jj]+'/'+li[ii]
+            except:
+                a=1
+           
+            line = file[ii].strip('\n').split(' ')
+            
+
+            if len(line)!=4:
+                line = file[ii].strip('\n').split(',')
+            if len(line)!=4:
+                line = file[ii].strip('\n').split('\t')
             
             try:
                 line[0]=int(line[0])
@@ -79,7 +86,7 @@ class UAVVideo(Video):
                 init_rect, img_names, gt_rect, attr, load_img)
 
 
-class UAV20Dataset(Dataset):
+class V4RDataset(Dataset):
     """
     Args:
         name: dataset name, should be 'UAV123', 'UAV20L'
@@ -87,8 +94,8 @@ class UAV20Dataset(Dataset):
         load_img: wether to load all imgs
     """
     def __init__(self, name, dataset_root, load_img=False):
-        super(UAV20Dataset, self).__init__(name, dataset_root)
-        meta_data = loaddata()
+        super(V4RDataset, self).__init__(name, dataset_root)
+        meta_data = ca()
 
         # load videos
         pbar = tqdm(meta_data.keys(), desc='loading '+name, ncols=100)

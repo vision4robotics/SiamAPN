@@ -2,8 +2,6 @@ META_ARC: "SiamAPN_alexnet"
 
 BACKBONE:
     TYPE: "alexnet"
-    KWARGS:
-        used_layers: 
     PRETRAINED:  ''         
     TRAIN_LAYERS: ['layer3','layer4','layer5'] 
     TRAIN_EPOCH: 10 
@@ -16,9 +14,7 @@ TRACK:
     CONTEXT_AMOUNT: 0.5 
     STRIDE: 8
     PENALTY_K: 0.08 
-    WINDOW_INFLUENCE: 0.438
-    LR: 0.302
-    w1: 1.98
+    w1: 1.18
     w2: 1.0
     w3: 1.0
 
@@ -44,8 +40,6 @@ TRAIN:
     POS_NUM : 16
     TOTAL_NUM : 64
     NEG_NUM : 16
-    LARGER: 1.0 
-    range : 1.0 
     LR:
         TYPE: 'log'
         KWARGS:

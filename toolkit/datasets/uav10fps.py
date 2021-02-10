@@ -10,7 +10,7 @@ from .dataset import Dataset
 from .video import Video
 
 def ca():
-    path='/home/tj-v4r/Dataset/UAV123_10fps'
+    path='./test_dataset/UAV123_10fps'
     
     name_list=os.listdir(path+'/data_seq')
     name_list.sort()

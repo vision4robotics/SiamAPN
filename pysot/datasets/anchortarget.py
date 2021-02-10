@@ -27,13 +27,13 @@ class AnchorTarget():
     
 
     def get(self,bbox,size):
-           
+        number=cfg.TRACK.INSTANCE_SIZE//2-size//2*cfg.TRACK.STRIDE
         labelcls2=np.zeros((1,size,size))-1
 
-        pre=(8*(np.linspace(0,size-1,size))+63).reshape(-1,1)-287//2
+        pre=(cfg.TRACK.STRIDE*(np.linspace(0,size-1,size))+number).reshape(-1,1)-cfg.TRACK.INSTANCE_SIZE//2
         pr=np.zeros((size**2,2))
-        pr[:,0]=np.maximum(0,np.tile(pre,(size)).T.reshape(-1)+287//2)
-        pr[:,1]=np.maximum(0,np.tile(pre,(size)).reshape(-1)+287//2)
+        pr[:,0]=np.maximum(0,np.tile(pre,(size)).T.reshape(-1)+cfg.TRACK.INSTANCE_SIZE//2)
+        pr[:,1]=np.maximum(0,np.tile(pre,(size)).reshape(-1)+cfg.TRACK.INSTANCE_SIZE//2)
     
         labelxff=np.zeros((4, size, size), dtype=np.float32)
         
@@ -44,20 +44,22 @@ class AnchorTarget():
         
         target=np.array([bbox.x1,bbox.y1,bbox.x2,bbox.y2])
         
-        index2=np.int32((target-63)/8)      
+        index2=np.int32((target-number)/cfg.TRACK.STRIDE)      
         w=int(index2[2]-index2[0])
         h=int(index2[3]-index2[1])
-        weightxff[0,np.maximum(0,index2[1]-h//3):np.minimum(size,index2[3]+1+h//3),np.maximum(0,index2[0]-w//3):np.minimum(size,index2[2]+1+w//3)]\
+        weightxff[0,np.maximum(0,index2[1]-h//cfg.TRAIN.weightxffrange):np.minimum(size,index2[3]+1+h//cfg.TRAIN.weightxffrange),\
+		np.maximum(0,index2[0]-w//cfg.TRAIN.weightxffrange):np.minimum(size,index2[2]+1+w//cfg.TRAIN.weightxffrange)]\
             =1
 
         
-        index=np.minimum(size-1,np.maximum(0,np.int32((target-63)/8)))
+        index=np.minimum(size-1,np.maximum(0,np.int32((target-number)/cfg.TRACK.STRIDE)))
         w=int(index[2]-index[0])
         h=int(index[3]-index[1])
 
-        weightcls3[0,index[1]:index[3]+1,index[0]:index[2]+1]=0.2
+        weightcls3[0,index[1]:index[3]+1,index[0]:index[2]+1]=cfg.TRAIN.weightcls3low
 
-        weightcls3[0,index[1]+h//4:index[3]+1-h//4,index[0]+w//4:index[2]+1-w//4]=1
+        weightcls3[0,index[1]+h//cfg.TRAIN.weightcls3range:index[3]+1-h//cfg.TRAIN.weightcls3range,\
+		index[0]+w//cfg.TRAIN.weightcls3range:index[2]+1-w//cfg.TRAIN.weightcls3range]=1
 
         for ii in np.arange(index[1],index[3]+1):
             for jj in np.arange(index[0],index[2]+1):
@@ -66,18 +68,19 @@ class AnchorTarget():
                  weightcls33[0,ii,jj]=weightcls3[0,ii,jj]*np.sqrt(l1*l2)
         
         
-        labelxff[0,:,:]=(pr[:,0]-target[0]).reshape(21,21)
-        labelxff[1,:,:]=(target[2]-pr[:,0]).reshape(21,21)
-        labelxff[2,:,:]=(pr[:,1]-target[1]).reshape(21,21)
-        labelxff[3,:,:]=(target[3]-pr[:,1]).reshape(21,21)
-        labelxff=labelxff/143*cfg.TRAIN.range               
-        index=np.minimum(size-1,np.maximum(0,np.int32((target-63)/8)))
+        labelxff[0,:,:]=(pr[:,0]-target[0]).reshape(size,size)
+        labelxff[1,:,:]=(target[2]-pr[:,0]).reshape(size,size)
+        labelxff[2,:,:]=(pr[:,1]-target[1]).reshape(size,size)
+        labelxff[3,:,:]=(target[3]-pr[:,1]).reshape(size,size)
+        labelxff=labelxff/cfg.TRACK.INSTANCE_SIZE//2              
+        index=np.minimum(size-1,np.maximum(0,np.int32((target-number)/cfg.TRACK.STRIDE)))
         ww=int(index[2]-index[0])
         hh=int(index[3]-index[1])
         
 
         labelcls2[0,index[1]:index[3]+1,index[0]:index[2]+1]=-2
-        labelcls2[0,index[1]+hh//4:index[3]+1-hh//4,index[0]+ww//4:index[2]+1-ww//4]=1
+        labelcls2[0,index[1]+hh//cfg.TRAIN.labelcls2range:index[3]+1-hh//cfg.TRAIN.labelcls2range,\
+		index[0]+ww//cfg.TRAIN.labelcls2range:index[2]+1-ww//cfg.TRAIN.labelcls2range]=1
         
         neg2=np.where(labelcls2.squeeze()==-1)
         neg2 = self.select(neg2, cfg.TRAIN.TOTAL_NUM - cfg.TRAIN.POS_NUM)
@@ -101,7 +104,7 @@ class AnchorTarget3():
         return tuple(p[slt] for p in position), keep_num
     
     def get(self, anchors,targets, size):
-
+        number=cfg.TRACK.INSTANCE_SIZE//2-size//2*cfg.TRACK.STRIDE
         num=cfg.TRAIN.BATCH_SIZE//cfg.TRAIN.NUM_GPU
 
         anchor_num=1
@@ -112,7 +115,7 @@ class AnchorTarget3():
         for i in range(num):
             anchor=anchors[i]
             target=targets[i].cpu().numpy()
-            index=np.minimum(size-1,np.maximum(0,np.int32((target-63)/8)))
+            index=np.minimum(size-1,np.maximum(0,np.int32((target-number)/cfg.TRACK.STRIDE)))
             w=int(index[2]-index[0])
             h=int(index[3]-index[1])
             neg = cfg.DATASET.NEG and cfg.DATASET.NEG > np.random.random()
@@ -125,9 +128,9 @@ class AnchorTarget3():
                 cx = size // 2
                 cy = size // 2
                 cx += int(np.ceil((tcx - cfg.TRAIN.SEARCH_SIZE // 2) /
-                          8 + 0.5))
+                          cfg.TRACK.STRIDE + 0.5))
                 cy += int(np.ceil((tcy - cfg.TRAIN.SEARCH_SIZE // 2) /
-                          8 + 0.5))
+                          cfg.TRACK.STRIDE + 0.5))
                 l = max(0, cx - 3)
                 r = min(size, cx + 4)
                 u = max(0, cy - 3)
@@ -148,21 +151,22 @@ class AnchorTarget3():
             y1 = cy - h * 0.5
             x2 = cx + w * 0.5
             y2 = cy + h * 0.5
-            index=np.minimum(size-1,np.maximum(0,np.int32((target-63)/8)))
+            index=np.minimum(size-1,np.maximum(0,np.int32((target-number)/cfg.TRACK.STRIDE)))
             ww=int(index[2]-index[0])
             hh=int(index[3]-index[1])
             labelcls2=np.zeros((1,size,size))-2
             labelcls2[0,index[1]:index[3]+1,index[0]:index[2]+1]=-1
-            labelcls2[0,index[1]+hh//4:index[3]+1-hh//4,index[0]+ww//4:index[2]+1-ww//4]=1  
+            labelcls2[0,index[1]+hh//cfg.TRAIN.labelcls2range:index[3]+1-hh//cfg.TRAIN.labelcls2range,\
+			index[0]+ww//cfg.TRAIN.labelcls2range:index[2]+1-ww//cfg.TRAIN.labelcls2range]=1  
             overlap[i] = IoU([x1, y1, x2, y2], target)
-            pos1 = np.where((overlap[i] > 0.80)) 
-            neg1 = np.where((overlap[i] <= 0.5))
+            pos1 = np.where((overlap[i] > cfg.TRAIN.clsthreshold1)) 
+            neg1 = np.where((overlap[i] <= cfg.TRAIN.clsthreshold2))
             pos1, pos_num1 = self.select(pos1, cfg.TRAIN.POS_NUM)
             neg1, neg_num1 = self.select(neg1, cfg.TRAIN.TOTAL_NUM - cfg.TRAIN.POS_NUM)
             cls[i][pos1] = 1
             cls[i][neg1] = 0
-            pos = np.where((overlap[i] > 0.72))
-            neg = np.where((overlap[i] <= 0.45)) 
+            pos = np.where((overlap[i] > cfg.TRAIN.locthreshold1))
+            neg = np.where((overlap[i] <= cfg.TRAIN.locthreshold2)) 
             pos, pos_num = self.select(pos, cfg.TRAIN.POS_NUM)
             neg, neg_num = self.select(neg, cfg.TRAIN.TOTAL_NUM - cfg.TRAIN.POS_NUM)
             if anchor[:,2].min()>0 and anchor[:,3].min()>0:    

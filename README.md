@@ -50,8 +50,8 @@ python eval.py 	                          \
 	--dataset UAV10fps                  \ # dataset_name
 	--tracker_prefix 'general_model'   # tracker_name
 ```
-## 5. V4RFlight112 benchmark
-V4RFlight112 benchmark is created from images captured during the real-world tests. It can be downloaded at [V4RFlight112](https://pan.baidu.com/s/1lF2pTQu39dIUC7iGR44mxA) (code: jk29).
+## 5. UAVTrack112 benchmark
+UAVTrack112 benchmark is created from images captured during the real-world tests. It can be downloaded at [UAVTrack112](https://pan.baidu.com/s/1lF2pTQu39dIUC7iGR44mxA) (code: jk29).
 
 ## 6. Acknowledgement
 The code is implemented based on [pysot](https://github.com/STVIR/pysot). We would like to express our sincere thanks to the contributors.

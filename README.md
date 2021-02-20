@@ -1,4 +1,4 @@
-# [SiamAPN]
+# [APNTracking]
 
 ## 1. Environment setup
 This code has been tested on Ubuntu 18.04, Python 3.8.3, Pytorch 0.7.0/1.6.0, CUDA 10.2.
@@ -8,14 +8,14 @@ pip install -r requirements.txt
 ```
 
 ## 2. Test
-Download pretrained model (epoch=37) : [general_model](https://pan.baidu.com/s/1GSgj3UwObcUKyT8TFSJ5qA)(code:w3u5) and put it into `tools/snapshot` directory.
+Download pretrained model and put it into `tools/snapshot` directory.
 
 Download testing datasets and put them into `test_dataset` directory. If you want to test the tracker on a new dataset, please refer to [pysot-toolkit](https://github.com/StrangerZhang/pysot-toolkit) to set test_dataset.
 
 ```bash 
 python test.py                                \
-	--dataset UAV10fps                      \ # 
-    --dataset_name
+	--dataset UAV10fps                      #dataset_name
+    --trackername SiamAPN
 	--snapshot snapshot/general_model.pth  # tracker_name
 ```
 The testing result will be saved in the `results/dataset_name/tracker_name` directory.
@@ -42,8 +42,20 @@ cd tools
 python train.py
 ```
 
-## 4. Evaluation
-We provide the tracking [results_v1](https://pan.baidu.com/s/1EWOSHNcOldJBCCmwY-mvVA) (code: s3p1) of UAV123@10fps, UAV20L, and VisDrone2018-SOT-test. Besides, the tracking [results_v2](https://pan.baidu.com/s/1zCmiWHbNiDTyUELyZ8NXwg) (code: j4t5) of UAV123@10fps, UAV20L, VisDrone2018-SOT-test and UAVTrack112 are  also provided. If you want to evaluate the tracker, please put those results into  `results` directory.
+## 4. Evaluation Trackers
+
+###[SiamAPN] 
+The pre-trained model can be found at (epoch=37) : [general_model](https://pan.baidu.com/s/1GSgj3UwObcUKyT8TFSJ5qA)(code:w3u5) 
+
+We provide the tracking [results_v1](https://pan.baidu.com/s/1EWOSHNcOldJBCCmwY-mvVA) (code: s3p1) of UAV123@10fps, UAV20L, and VisDrone2018-SOT-test. Besides, the tracking [results_v2](https://pan.baidu.com/s/1zCmiWHbNiDTyUELyZ8NXwg) (code: j4t5) of UAV123@10fps, UAV20L, VisDrone2018-SOT-test and UAVTrack112 are  also provided. 
+
+###[ADSiamAPN] 
+The pre-trained model can be found at (epoch=25): [general_model](https://pan.baidu.com/s/1ovv45-pfQ9PQQJMi2b2K3A)(code:j29k)
+
+We provide the tracking [results](https://pan.baidu.com/s/11Gpf4vjKrIyWh4QV8CVWTA) (code: xb41) of UAV123@10fps, UAV20L.
+
+
+If you want to evaluate the tracker mentioned above, please put those results into  `results` directory.
 ```
 python eval.py 	                          \
 	--tracker_path ./results          \ # result path

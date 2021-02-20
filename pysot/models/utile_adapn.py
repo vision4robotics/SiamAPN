@@ -171,8 +171,8 @@ class APN(nn.Module):
     
     def forward(self,x,z):
 
-        res2=self.conv3(self.xcorr_depthwise(x[1],z[1]))
-        ress=self.xcorr_depthwise(self.conv5(x[2]),self.conv6(z[2]))
+        res2=self.conv3(self.xcorr_depthwise(x[0],z[0]))
+        ress=self.xcorr_depthwise(self.conv5(x[1]),self.conv6(z[1]))
         ress=self.adcat(ress,res2)
 
         res=self.conv_shape(ress)
@@ -257,7 +257,7 @@ class clsandloc(nn.Module):
         return out
 
     def forward(self, x,z,ress):
-        res=self.xcorr_depthwise(self.conv1(x[2]),self.conv2(z[2]))
+        res=self.xcorr_depthwise(self.conv1(x[1]),self.conv2(z[1]))
         
         point=self.point(res)
         channel=self.conv4(self.channel(point))

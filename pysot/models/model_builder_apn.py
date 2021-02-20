@@ -7,12 +7,12 @@ from __future__ import unicode_literals
 import torch as t
 import torch.nn as nn
 import torch.nn.functional as F
-from pysot.core.config import cfg
-from pysot.models.loss import select_cross_entropy_loss, weight_l1_loss,l1loss,IOULoss
+from pysot.core.config_apn import cfg
+from pysot.models.loss_apn import select_cross_entropy_loss, weight_l1_loss,l1loss,IOULoss
 from pysot.models.backbone.newalexnet import AlexNet
 from pysot.models.utile_apn import APN,clsandloc
 import numpy as np
-from pysot.datasets.anchortarget import AnchorTarget3
+from pysot.datasets.anchortarget_apn import AnchorTarget3
 
 
 class ModelBuilderAPN(nn.Module):

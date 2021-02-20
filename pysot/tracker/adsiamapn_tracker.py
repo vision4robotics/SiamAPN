@@ -4,7 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import numpy as np
 import torch.nn.functional as F
-from pysot.core.config import cfg
+from pysot.core.config_adapn import cfg
 from pysot.tracker.base_tracker import SiameseTracker
 
 class ADSiamRPNTracker(SiameseTracker):
@@ -106,7 +106,7 @@ class ADSiamRPNTracker(SiameseTracker):
     def con(self, x):
         return  x*(cfg.TRAIN.SEARCH_SIZE//4)
 
-    def track(self, img,idx,parame1,parame2,parame3):
+    def track(self, img):
         """
         args:
             img(np.ndarray): BGR image
@@ -154,17 +154,17 @@ class ADSiamRPNTracker(SiameseTracker):
         # aspect ratio penalty
         r_c = change((self.size[0]/(self.size[1]+1e-5)) /
                      (pred_bbox[2, :]/(pred_bbox[3, :]+1e-5)))
-        penalty = np.exp(-(r_c * s_c - 1) * parame1)
+        penalty = np.exp(-(r_c * s_c - 1) * cfg.TRACK.PENALTY_K)
         pscore = penalty * score
 
         # window penalty
-        pscore = pscore * (1 - parame3) + \
-            self.window * parame3
+        pscore = pscore * (1 - cfg.TRACK.WINDOW_INFLUENCE) + \
+            self.window * cfg.TRACK.WINDOW_INFLUENCE
         best_idx = np.argmax(pscore)
         
         bbox = pred_bbox[:, best_idx] / scale_z
         
-        lr = penalty[best_idx] * score[best_idx] * parame2 
+        lr = penalty[best_idx] * score[best_idx] * cfg.TRACK.LR 
 
         cx = bbox[0] + self.center_pos[0]
         cy = bbox[1] + self.center_pos[1]

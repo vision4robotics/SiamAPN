@@ -11,8 +11,8 @@ import cv2
 import torch
 import numpy as np
 
-from pysot.core.config import cfg
 from pysot.models.model_builder_apn import ModelBuilderAPN
+from pysot.models.model_builder_adapn import ModelBuilderADAPN
 from pysot.tracker.siamapn_tracker import SiamAPNTracker
 from pysot.tracker.adsiamapn_tracker import ADSiamRPNTracker
 from pysot.utils.bbox import get_axis_aligned_bbox
@@ -21,10 +21,8 @@ from toolkit.datasets import DatasetFactory
 
 
 parser = argparse.ArgumentParser(description='siamapn tracking')
-parser.add_argument('--dataset', default='UAV123_10fps',type=str,
+parser.add_argument('--dataset', default='UAV20l',type=str,
         help='datasets')
-parser.add_argument('--config', default='./../experiments/config.yaml', type=str,
-        help='config file')
 parser.add_argument('--snapshot', default='./snapshot/general_model.pth', type=str,
         help='snapshot of models to eval')
 parser.add_argument('--trackername', default='SiamAPN', type=str,
@@ -39,30 +37,27 @@ torch.set_num_threads(1)
 
 def main():
     # load config
-    cfg.merge_from_file(args.config)
+    if args.trackername=='SiamAPN':
+        from pysot.core.config_apn import cfg
+        cfg.merge_from_file('./../experiments/siamapn/config.yaml')
+        model = ModelBuilderAPN()
+        model = load_pretrain(model, args.snapshot).cuda().eval()
+        tracker = SiamAPNTracker(model)
+    elif args.trackername=='ADSiamAPN':
+        from pysot.core.config_adapn import cfg
+        cfg.merge_from_file('./../experiments/adsiamapn/config.yaml')
+        model = ModelBuilderADAPN()
+        model = load_pretrain(model, args.snapshot).cuda().eval()
+        tracker = ADSiamRPNTracker(model)
+    else:
+        print('Cannot find the tracker')
+        
 
     cur_dir = os.path.dirname(os.path.realpath(__file__))
     dataset_root = os.path.join(cur_dir, '../test_dataset', args.dataset)
+
     # create model
-	if args.trackername=='SiamAPN':
-	
-       model = ModelBuilderAPN()
-
-    # load model
-       model = load_pretrain(model, args.snapshot).cuda().eval()
-
-    # build tracker
-       tracker = SiamAPNTracker(model)
-	elif args.trackername=='ADSiamAPN':
-	   model = ModelBuilderADAPN()
-
-    # load model
-       model = load_pretrain(model, args.snapshot).cuda().eval()
-
-    # build tracker
-       tracker = ADSiamAPNTracker(model)
-	else:
-	   print("Wrong tracker name")
+    
 	   
 
     # create dataset

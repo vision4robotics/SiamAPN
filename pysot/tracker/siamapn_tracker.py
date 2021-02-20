@@ -4,7 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import numpy as np
 import torch.nn.functional as F
-from pysot.core.config import cfg
+from pysot.core.config_apn import cfg
 from pysot.tracker.base_tracker import SiameseTracker
 
 class SiamAPNTracker(SiameseTracker):

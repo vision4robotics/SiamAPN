@@ -12,12 +12,13 @@ Download pretrained model and put it into `tools/snapshot` directory.
 
 Download testing datasets and put them into `test_dataset` directory. If you want to test the tracker on a new dataset, please refer to [pysot-toolkit](https://github.com/StrangerZhang/pysot-toolkit) to set test_dataset.
 
-```bash 
-python test.py                                \
-	--dataset UAV10fps                      #dataset_name
-    --trackername SiamAPN
-	--snapshot snapshot/general_model.pth  # tracker_name
 ```
+python test.py 	                          \
+	--trackername SiamAPN           \ # tracker_name
+	--dataset UAV10fps                  \ # dataset_name
+	--snapshot snapshot/general_model.pth   # model_path
+```
+
 The testing result will be saved in the `results/dataset_name/tracker_name` directory.
 
 ## 3. Train

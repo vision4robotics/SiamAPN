@@ -43,7 +43,7 @@ def main():
         model = ModelBuilderAPN()
         model = load_pretrain(model, args.snapshot).cuda().eval()
         tracker = SiamAPNTracker(model)
-    elif args.trackername=='ADSiamAPN':
+    elif args.trackername=='SiamAPN++':
         from pysot.core.config_adapn import cfg
         cfg.merge_from_file('./../experiments/adsiamapn/config.yaml')
         model = ModelBuilderADAPN()

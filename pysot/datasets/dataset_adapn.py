@@ -4,7 +4,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
-
+import torch as t
 import json
 import logging
 import sys
@@ -15,11 +15,12 @@ import cv2
 import numpy as np
 from torch.utils.data import Dataset
 
-from pysot.datasets.anchortarget import AnchorTarget
+from pysot.datasets.anchortarget_adapn import AnchorTarget
 
 from pysot.utils.bbox import center2corner, Center
 from pysot.datasets.augmentation import Augmentation
-from pysot.core.config import cfg
+from pysot.core.config_adapn import cfg
+import matplotlib.pyplot as plt
 
 logger = logging.getLogger("global")
 
@@ -225,7 +226,23 @@ class TrkDataset(Dataset):
 
     def __len__(self):
         return self.num
-
+    def denhance(self,img):
+        img=img/255
+        Ir=img[:,:,2]
+        Ig=img[:,:,1]
+        Ib=img[:,:,0]
+        num=np.random.uniform(1,3,1)
+        Lw = num-(0.299 * Ir + 0.587 * Ig + 0.114 * Ib)
+        m,n = Lw.shape
+        Lwaver = np.exp(np.sum(np.log(1e-5 + Lw)) / (m * n))
+        Lg = np.log(Lw / Lwaver + 1) / np.log(np.max(Lw) / Lwaver + 1)
+        gain = Lg / Lw
+        
+        img[:,:,2]=Ir*gain*255
+        img[:,:,1]=Ig*gain*255
+        img[:,:,0]=Ib*gain*255
+        return img
+    
     def __getitem__(self, index):
         index = self.pick[index]
         dataset, index = self._find_dataset(index)
@@ -244,8 +261,22 @@ class TrkDataset(Dataset):
         # get image
         template_image = cv2.imread(self.rot+template[0])
         search_image = cv2.imread(self.rot+search[0])
+        
+        # template_image=self.denhance(template_image)
+        # search_image=self.denhance(search_image)
+        
+        
+        # plt.figure("z")
+        # plt.imshow(search_image.astype(np.int64))
+        # plt.show() 
+        # plt.figure("x")
+        # plt.imshow(template_image.astype(np.int64))
+        # plt.show() 
+        
         if template_image is None:
             print('error image:',template[0])
+        if search_image is None:
+            print('error image:',search[0])
 
         # get bounding box
         template_box = self._get_bbox(template_image, template[1])

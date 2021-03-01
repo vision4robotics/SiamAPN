@@ -21,22 +21,22 @@ from tensorboardX import SummaryWriter
 from torch.nn.utils import clip_grad_norm_
 from torch.utils.data.distributed import DistributedSampler
 
-from pysot.utils.lr_scheduler import build_lr_scheduler
+from pysot.utils.lr_scheduler_adapn import build_lr_scheduler
 from pysot.utils.log_helper import init_log, print_speed, add_file_handler
 from pysot.utils.distributed import dist_init, reduce_gradients,\
         average_reduce, get_rank, get_world_size
 from pysot.utils.model_load import load_pretrain, restore_from
 from pysot.utils.average_meter import AverageMeter
 from pysot.utils.misc import describe, commit
-from pysot.models.model_builder import ModelBuilder
+from pysot.models.model_builder_adapn import ModelBuilderADAPN
 
-from pysot.datasets.dataset import TrkDataset
-from pysot.core.config import cfg
+from pysot.datasets.dataset_adapn import TrkDataset
+from pysot.core.config_adapn import cfg
 
 
 logger = logging.getLogger('global')
-parser = argparse.ArgumentParser(description='SiamAPN tracking')
-parser.add_argument('--cfg', type=str, default='../experiments/config.yaml',
+parser = argparse.ArgumentParser(description='SiamAPN++ tracking')
+parser.add_argument('--cfg', type=str, default='../experiments/siamapn++/config.yaml',
                     help='configuration of tracking')
 parser.add_argument('--seed', type=int, default=123456,
                     help='random seed')
@@ -229,7 +229,7 @@ def main():
         logger.info("config \n{}".format(json.dumps(cfg, indent=4)))
 
     # create model
-    model = ModelBuilder().train()
+    model = ModelBuilderADAPN().train()
     dist_model = nn.DataParallel(model).cuda()
 
     # load pretrained backbone weights

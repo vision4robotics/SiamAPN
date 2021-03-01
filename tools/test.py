@@ -21,9 +21,9 @@ from toolkit.datasets import DatasetFactory
 
 
 parser = argparse.ArgumentParser(description='siamapn tracking')
-parser.add_argument('--dataset', default='UAV20l',type=str,
+parser.add_argument('--dataset', default='UAV123_10fps',type=str,
         help='datasets')
-parser.add_argument('--snapshot', default='./snapshot/general_model.pth', type=str,
+parser.add_argument('--snapshot', default='./snapshot/general_model apn.pth', type=str,
         help='snapshot of models to eval')
 parser.add_argument('--trackername', default='SiamAPN', type=str,
         help='snapshot of models to eval')
@@ -45,7 +45,7 @@ def main():
         tracker = SiamAPNTracker(model)
     elif args.trackername=='SiamAPN++':
         from pysot.core.config_adapn import cfg
-        cfg.merge_from_file('./../experiments/adsiamapn/config.yaml')
+        cfg.merge_from_file('./../experiments/siamapn++/config.yaml')
         model = ModelBuilderADAPN()
         model = load_pretrain(model, args.snapshot).cuda().eval()
         tracker = ADSiamRPNTracker(model)
@@ -55,7 +55,7 @@ def main():
 
     cur_dir = os.path.dirname(os.path.realpath(__file__))
     dataset_root = os.path.join(cur_dir, '../test_dataset', args.dataset)
-
+    dataset_root='/home/tj-v4r/Dataset/UAV123_10fps'
     # create model
     
 	   
@@ -69,58 +69,59 @@ def main():
 
     # OPE tracking
     for v_idx, video in enumerate(dataset):
-        if args.video != '':
-            # test one special video
-            if video.name != args.video:
-                continue
-        toc = 0
-        pred_bboxes = []
-        scores = []
-        track_times = []
-        for idx, (img, gt_bbox) in enumerate(video):
-            tic = cv2.getTickCount()
-            if idx == 0:
-                cx, cy, w, h = get_axis_aligned_bbox(np.array(gt_bbox))
-                gt_bbox_ = [cx-(w-1)/2, cy-(h-1)/2, w, h]
-                tracker.init(img, gt_bbox_)
-                pred_bbox = gt_bbox_
-                scores.append(None)
-                if 'VOT2018-LT' == args.dataset:
-                    pred_bboxes.append([1])
+        if video.name=='uav1_1':
+            if args.video != '':
+                # test one special video
+                if video.name != args.video:
+                    continue
+            toc = 0
+            pred_bboxes = []
+            scores = []
+            track_times = []
+            for idx, (img, gt_bbox) in enumerate(video):
+                tic = cv2.getTickCount()
+                if idx == 0:
+                    cx, cy, w, h = get_axis_aligned_bbox(np.array(gt_bbox))
+                    gt_bbox_ = [cx-(w-1)/2, cy-(h-1)/2, w, h]
+                    tracker.init(img, gt_bbox_)
+                    pred_bbox = gt_bbox_
+                    scores.append(None)
+                    if 'VOT2018-LT' == args.dataset:
+                        pred_bboxes.append([1])
+                    else:
+                        pred_bboxes.append(pred_bbox)
                 else:
+                    outputs = tracker.track(img,idx)
+                    pred_bbox = outputs['bbox']
                     pred_bboxes.append(pred_bbox)
-            else:
-                outputs = tracker.track(img)
-                pred_bbox = outputs['bbox']
-                pred_bboxes.append(pred_bbox)
-                scores.append(outputs['best_score'])
-            toc += cv2.getTickCount() - tic
-            track_times.append((cv2.getTickCount() - tic)/cv2.getTickFrequency())
-            if idx == 0:
-                cv2.destroyAllWindows()
-            if args.vis and idx > 0:
-                gt_bbox = list(map(int, gt_bbox))
-                pred_bbox = list(map(int, pred_bbox))
-                cv2.rectangle(img, (gt_bbox[0], gt_bbox[1]),
-                              (gt_bbox[0]+gt_bbox[2], gt_bbox[1]+gt_bbox[3]), (0, 255, 0), 3)
-                cv2.rectangle(img, (pred_bbox[0], pred_bbox[1]),
-                              (pred_bbox[0]+pred_bbox[2], pred_bbox[1]+pred_bbox[3]), (0, 255, 255), 3)
-                cv2.putText(img, str(idx), (40, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
-                cv2.imshow(video.name, img)
-                cv2.waitKey(1)
-        toc /= cv2.getTickFrequency()
-        # save results
-
-        model_path = os.path.join('results', args.dataset, model_name)
-        if not os.path.isdir(model_path):
-            os.makedirs(model_path)
-        result_path = os.path.join(model_path, '{}.txt'.format(video.name))
-        with open(result_path, 'w') as f:
-            for x in pred_bboxes:
-                f.write(','.join([str(i) for i in x])+'\n')
-        print('({:3d}) Video: {:12s} Time: {:5.1f}s Speed: {:3.1f}fps'.format(
-            v_idx+1, video.name, toc, idx / toc))
-
+                    scores.append(outputs['best_score'])
+                toc += cv2.getTickCount() - tic
+                track_times.append((cv2.getTickCount() - tic)/cv2.getTickFrequency())
+                if idx == 0:
+                    cv2.destroyAllWindows()
+                if args.vis and idx > 0:
+                    gt_bbox = list(map(int, gt_bbox))
+                    pred_bbox = list(map(int, pred_bbox))
+                    cv2.rectangle(img, (gt_bbox[0], gt_bbox[1]),
+                                  (gt_bbox[0]+gt_bbox[2], gt_bbox[1]+gt_bbox[3]), (0, 255, 0), 3)
+                    cv2.rectangle(img, (pred_bbox[0], pred_bbox[1]),
+                                  (pred_bbox[0]+pred_bbox[2], pred_bbox[1]+pred_bbox[3]), (0, 255, 255), 3)
+                    cv2.putText(img, str(idx), (40, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
+                    cv2.imshow(video.name, img)
+                    cv2.waitKey(1)
+            toc /= cv2.getTickFrequency()
+            # save results
+    
+            model_path = os.path.join('results', args.dataset, model_name)
+            if not os.path.isdir(model_path):
+                os.makedirs(model_path)
+            result_path = os.path.join(model_path, '{}.txt'.format(video.name))
+            with open(result_path, 'w') as f:
+                for x in pred_bboxes:
+                    f.write(','.join([str(i) for i in x])+'\n')
+            print('({:3d}) Video: {:12s} Time: {:5.1f}s Speed: {:3.1f}fps'.format(
+                v_idx+1, video.name, toc, idx / toc))
+    
 
 if __name__ == '__main__':
     main()

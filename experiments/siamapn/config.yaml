@@ -2,7 +2,7 @@ META_ARC: "SiamAPN_alexnet"
 
 BACKBONE:
     TYPE: "alexnet"
-    PRETRAINED:  ''         
+    PRETRAINED:  'alexnet-bn.pth'         
     TRAIN_LAYERS: ['layer3','layer4','layer5'] 
     TRAIN_EPOCH: 10 
     LAYERS_LR: 0.1
@@ -26,7 +26,7 @@ TRAIN:
     BASE_LR: 0.005
     RESUME: ''
     WEIGHT_DECAY : 0.0001
-    PRETRAINED: 1
+    PRETRAINED: 0
     OUTPUT_SIZE: 21 
     NUM_WORKERS: 8
     LOC_WEIGHT: 1.0 

@@ -99,7 +99,7 @@ class SiamAPNTracker(SiameseTracker):
     def con(self, x):
         return  x*(cfg.TRAIN.SEARCH_SIZE//2)
 
-    def track(self, img):
+    def track(self, img,idx):
         """
         args:
             img(np.ndarray): BGR image
@@ -177,6 +177,9 @@ class SiamAPNTracker(SiameseTracker):
                 width,
                 height]
 
+        if idx==507:
+            a=1
+            
         best_score = score[best_idx]
 
         return {

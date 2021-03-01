@@ -243,7 +243,7 @@ __C.TRACK.TYPE = 'SiamAPNtracker'
 __C.TRACK.PENALTY_K = 0.04
 
 # Window influence
-__C.TRACK.WINDOW_INFLUENCE = 0.4364
+__C.TRACK.WINDOW_INFLUENCE = 0.438
 
 # Interpolation learning rate
 __C.TRACK.LR = 0.302

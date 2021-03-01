@@ -12,15 +12,15 @@ import cv2
 import torch
 from glob import glob
 
-from pysot.core.config import cfg
-from pysot.models.model_builder import ModelBuilder
+from pysot.core.config_apn import cfg
+from pysot.models.model_builder_apn import ModelBuilderAPN
 from pysot.tracker.siamapn_tracker import SiamAPNTracker
 from pysot.utils.model_load import load_pretrain
 
 torch.set_num_threads(1)
 
 parser = argparse.ArgumentParser(description='SiamAPN demo')
-parser.add_argument('--config', type=str, default='../experiments/config.yaml', help='config file')
+parser.add_argument('--config', type=str, default='../experiments/siamapn/config.yaml', help='config file')
 parser.add_argument('--snapshot', type=str, default='./snapshot/general_model.pth', help='model name')
 parser.add_argument('--video_name', default='../test_dataset/sequence_name', type=str, help='videos or image files')
 args = parser.parse_args()
@@ -62,7 +62,7 @@ def main():
     device = torch.device('cuda' if cfg.CUDA else 'cpu')
 
     # create model
-    model = ModelBuilder()
+    model = ModelBuilderAPN()
 
     # load model
     model = load_pretrain(model, args.snapshot).eval().to(device)

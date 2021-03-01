@@ -40,7 +40,7 @@ To train the SiamAPN model, run `train.py` with the desired configs:
 
 ```bash
 cd tools
-python train.py
+python train_apn.py 
 ```
 
 ## 4. Trackers

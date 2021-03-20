@@ -91,7 +91,7 @@ def main():
                     else:
                         pred_bboxes.append(pred_bbox)
                 else:
-                    outputs = tracker.track(img,idx)
+                    outputs = tracker.track(img)
                     pred_bbox = outputs['bbox']
                     pred_bboxes.append(pred_bbox)
                     scores.append(outputs['best_score'])

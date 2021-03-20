@@ -68,7 +68,6 @@ def main():
 
     # OPE tracking
     for v_idx, video in enumerate(dataset):
-        if video.name=='uav1_1':
             if args.video != '':
                 # test one special video
                 if video.name != args.video:

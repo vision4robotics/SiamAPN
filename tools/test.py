@@ -55,7 +55,6 @@ def main():
 
     cur_dir = os.path.dirname(os.path.realpath(__file__))
     dataset_root = os.path.join(cur_dir, '../test_dataset', args.dataset)
-    dataset_root='/home/tj-v4r/Dataset/UAV123_10fps'
     # create model
     
 	   

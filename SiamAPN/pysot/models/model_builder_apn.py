@@ -110,18 +110,8 @@ class ModelBuilderAPN(nn.Module):
         loc[:,:,3]=locc[:,:,1]+locc[:,:,3]/2
         
         return loc
-    def _convert_score(self, score):
-        score = score.permute(1, 2, 3, 0).contiguous().view(2, -1).permute(1, 0)
-        score = F.softmax(score, dim=1).data[:, 1].cpu().numpy()
-        return score
+
     
-    def transform(self,center):
-        xx, yy, ww, hh = center[:,:,0], center[:,:,1], center[:,:,2], center[:,:,3]
-        x1 = (xx - ww * 0.5).view(center[:,:,0].size())
-        y1 = (yy - hh * 0.5).view(center[:,:,0].size())
-        x2 = (xx + ww * 0.5).view(center[:,:,0].size())
-        y2 = (yy + hh * 0.5).view(center[:,:,0].size())
-        return  t.cat((x1.unsqueeze(-1),y1.unsqueeze(-1),x2.unsqueeze(-1),y2.unsqueeze(-1)),-1)
     def forward(self,data):
         """ only used in training
         """

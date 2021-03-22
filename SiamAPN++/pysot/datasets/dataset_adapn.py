@@ -262,17 +262,7 @@ class TrkDataset(Dataset):
         template_image = cv2.imread(self.rot+template[0])
         search_image = cv2.imread(self.rot+search[0])
         
-        # template_image=self.denhance(template_image)
-        # search_image=self.denhance(search_image)
-        
-        
-        # plt.figure("z")
-        # plt.imshow(search_image.astype(np.int64))
-        # plt.show() 
-        # plt.figure("x")
-        # plt.imshow(template_image.astype(np.int64))
-        # plt.show() 
-        
+
         if template_image is None:
             print('error image:',template[0])
         if search_image is None:

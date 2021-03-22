@@ -44,9 +44,6 @@ class ModelBuilderAPN(nn.Module):
 
         self.ranchors=xff
               
-
-        
-        #cls1,cls2,cls3,loc =self.new(xf,self.zf,xff)
         cls1,cls2,cls3,loc =self.new(xf,self.zf,ress)  
  
         return {
@@ -72,52 +69,28 @@ class ModelBuilderAPN(nn.Module):
         
         size=mapp.size()[3]
         #location 
-        x=np.tile((8*(np.linspace(0,size-1,size))+63)-287//2,size).reshape(-1)
-        y=np.tile((8*(np.linspace(0,size-1,size))+63).reshape(-1,1)-287//2,size).reshape(-1)
+        x=np.tile((cfg.TRAIN.STRIDE*(np.linspace(0,size-1,size))+cfg.TRAIN.MOV)-cfg.TRAIN.SEARCH_SIZE//2,size).reshape(-1)
+        y=np.tile((cfg.TRAIN.STRIDE*(np.linspace(0,size-1,size))+cfg.TRAIN.MOV).reshape(-1,1)-cfg.TRAIN.SEARCH_SIZE//2,size).reshape(-1)
         shap=con(mapp).cpu().detach().numpy()
         xx=np.int16(np.tile(np.linspace(0,size-1,size),size).reshape(-1))
         yy=np.int16(np.tile(np.linspace(0,size-1,size).reshape(-1,1),size).reshape(-1))
 
-        # xx=xx.reshape(-1,1).repeat(repeats=cfg.TRAIN.BATCH_SIZE,axis=1)
-        # yy=yy.reshape(-1,1).repeat(repeats=cfg.TRAIN.BATCH_SIZE,axis=1)
-
-        # w=np.abs(shap[:,2,yy,xx]*143)
-        # h=np.abs(shap[:,3,yy,xx]*143)
-        # x=x+shap[:,0,yy,xx]*80
-        # y=y+shap[:,1,yy,xx]*80
         w=shap[:,0,yy,xx]+shap[:,1,yy,xx]
         h=shap[:,2,yy,xx]+shap[:,3,yy,xx]
         x=x-shap[:,0,yy,xx]+w/2
         y=y-shap[:,2,yy,xx]+h/2
-        # w=np.abs(shap[:,0,yy,xx]*143)
-        # h=np.abs(shap[:,1,yy,xx]*143)
-        
-        
-        # w=shap[:,0,yy,xx]
-        # h=shap[:,1,yy,xx]
         
         anchor=np.zeros((cfg.TRAIN.BATCH_SIZE//cfg.TRAIN.NUM_GPU,size**2,4))
 
-        anchor[:,:,0]=x+287//2
-        anchor[:,:,1]=y+287//2
+        anchor[:,:,0]=x+cfg.TRAIN.SEARCH_SIZE//2
+        anchor[:,:,1]=y+cfg.TRAIN.SEARCH_SIZE//2
         anchor[:,:,2]=w
         anchor[:,:,3]=h
 
 
         return anchor
 
-    # def _convert_bbox(self, delta, anchor):
-    #     delta = delta.contiguous().view(anchor.shape[0],4, -1)
-        
-    #     anchor=t.Tensor(anchor).cuda().float()
-    #     locc=t.zeros_like(anchor).cuda()
-    #     # x1y1x2y2 -->cxcywh
-    #     locc[:,:,0] = delta[:,0, :]*143 +(anchor[:, :,0] -anchor[:,:, 2]/2 )
-    #     locc[:,:,1] = delta[:,2, :]*143 +(anchor[:, :,1] -anchor[:,:, 3]/2 )
-    #     locc[:,:,2] = (anchor[:, :,0] +anchor[:,:, 2]/2 )-delta[:,1, :]*143
-    #     locc[:,:,3] = (anchor[:, :,1] +anchor[:,:, 3]/2 )-delta[:,3, :]*143
-        
-    #     return locc
+
     
     def _convert_bbox(self, delta, anchor):
         delta = delta.contiguous().view(anchor.shape[0],4, -1)

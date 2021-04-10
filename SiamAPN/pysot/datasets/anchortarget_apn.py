@@ -70,7 +70,7 @@ class AnchorTarget():
         labelxff[1,:,:]=(target[2]-pr[:,0]).reshape(size,size)
         labelxff[2,:,:]=(pr[:,1]-target[1]).reshape(size,size)
         labelxff[3,:,:]=(target[3]-pr[:,1]).reshape(size,size)
-        labelxff=labelxff/(cfg.TRAIN.SEARCH_SIZE//2)*cfg.TRAIN.range               
+        labelxff=labelxff/(cfg.TRAIN.SEARCH_SIZE//2)              
         index=np.minimum(size-1,np.maximum(0,np.int32((target-cfg.TRAIN.MOV)/cfg.TRAIN.STRIDE)))
         ww=int(index[2]-index[0])
         hh=int(index[3]-index[1])

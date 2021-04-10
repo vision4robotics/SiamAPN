@@ -77,7 +77,7 @@ class AnchorTarget():
 
 
         
-        labelxff=labelxff/(cfg.TRAIN.SEARCH_SIZE//2)*2*cfg.TRAIN.range               
+        labelxff=labelxff/(cfg.TRAIN.SEARCH_SIZE//4)              
         index=np.minimum(size-1,np.maximum(0,np.int32((target-offset)/8)))
         ww=int(index[2]-index[0])+1
         hh=int(index[3]-index[1])+1

@@ -64,7 +64,7 @@ python eval.py 	                          \
 	--tracker_prefix 'general_model'   # tracker_name
 ```
 ## UAVTrack112 benchmark
-UAVTrack112 benchmark is created from images captured during the real-world tests. It can be downloaded at [UAVTrack112](https://pan.baidu.com/s/1lF2pTQu39dIUC7iGR44mxA) (code: jk29).
+UAVTrack112 benchmark is created from images captured during the real-world tests. It can be downloaded at [UAVTrack112](https://pan.baidu.com/s/1lF2pTQu39dIUC7iGR44mxA) (code: jk29). If you want to use this UAVTracking benchmark, please cite the paper below. More detail of the benchmark are available in [here](https://github.com/vision4robotics/SiamAPN/tree/master/UAVTrack112).
 
 ## References 
 
@@ -95,17 +95,13 @@ UAVTrack112 benchmark is created from images captured during the real-world test
 ```
 
 ## Contact
+If you have any questions, please contact me.
+
 Ziang Cao
 
 Email: [1753419@tongji.edu.cn](1753419@tongji.edu.cn)
 
-Changhong Fu
 
-Email: [changhongfu@tongji.edu.cn](changhongfu@tongji.edu.cn)
-
-Yiming Li
-
-Email: [yimingli@nyu.edu](yimingli@nyu.edu)
 
 ## 8. Acknowledgement
 The code is implemented based on [pysot](https://github.com/STVIR/pysot). We would like to express our sincere thanks to the contributors.

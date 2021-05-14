@@ -12,7 +12,7 @@ UAVTrack112
     --anno \ the ground truth of each frame 
           ...
 
-    --att \ the attributes of each sequence
+    --att \ the 13 attributes of each sequence
           ...
 
 ```

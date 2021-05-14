@@ -69,7 +69,7 @@ UAVTrack112 benchmark is created from images captured during the real-world test
 ## References 
 
 ```
-@INPROCEEDINGS{fu2020siamese,       
+@INPROCEEDINGS{fu2021siamese,       
 	author={Fu, Changhong and Cao, Ziang and Li, Yiming and Ye, Junjie and Feng, Chen},   
 	booktitle={Proceedings of the IEEE International Conference on Robotics and Automation (ICRA)}, 
 	title={{Siamese Anchor Proposal Network for High-Speed Aerial Tracking}},
@@ -77,6 +77,20 @@ UAVTrack112 benchmark is created from images captured during the real-world test
 	volume={},
 	number={},
 	pages={1-7}
+}
+
+```
+
+```
+@INPROCEEDINGS{fu2021tgrs,       
+	author={Fu, Changhong and Cao, Ziang and Li, Yiming and Ye, Junjie and Feng, Chen},   
+	journal={IEEE Transactions on Geoscience and Remote Sensing}, 
+	title={{Onboard Real-Time Aerial Tracking with Efficient
+Siamese Anchor Proposal Network}},
+	year={2021},
+	volume={},
+	number={},
+	pages={1-13}
 }
 
 ```

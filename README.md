@@ -85,8 +85,7 @@ UAVTrack112 benchmark is created from images captured during the real-world test
 @INPROCEEDINGS{fu2021tgrs,       
 	author={Fu, Changhong and Cao, Ziang and Li, Yiming and Ye, Junjie and Feng, Chen},   
 	journal={IEEE Transactions on Geoscience and Remote Sensing}, 
-	title={{Onboard Real-Time Aerial Tracking with Efficient
-Siamese Anchor Proposal Network}},
+	title={{Onboard Real-Time Aerial Tracking with Efficient Siamese Anchor Proposal Network}},
 	year={2021},
 	volume={},
 	number={},

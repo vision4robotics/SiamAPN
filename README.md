@@ -55,6 +55,8 @@ The pre-trained model can be found at (epoch=25): [general_model](https://pan.ba
 
 We provide the tracking [results](https://pan.baidu.com/s/11Gpf4vjKrIyWh4QV8CVWTA) (code: xb41) of UAV123@10fps, UAV20L.
 
+**Note:**The pre-trained model of SiamAPN and SiamAPN++ can also be found at [googledriver](https://drive.google.com/drive/folders/19I1CJ_86CcSnPlkt5mrgB0jsK-ucB5bJ)
+
 ## Evaluation 
 If you want to evaluate the tracker mentioned above, please put those results into  `results` directory.
 ```

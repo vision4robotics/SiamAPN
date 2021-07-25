@@ -105,5 +105,5 @@ Email: [1753419@tongji.edu.cn](1753419@tongji.edu.cn)
 
 
 
-## 8. Acknowledgement
+## Acknowledgement
 The code is implemented based on [pysot](https://github.com/STVIR/pysot). We would like to express our sincere thanks to the contributors.

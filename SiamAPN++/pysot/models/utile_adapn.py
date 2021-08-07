@@ -46,7 +46,6 @@ class selfchannelbranch(nn.Module):
                  nn.ReLU(inplace=True),
                  )
         
-        self.gamma1 = nn.Parameter(t.zeros(1).cuda())
         self.gamma2 = nn.Parameter(t.zeros(1).cuda())
 
         self.softmax  = nn.Softmax(dim=-1)

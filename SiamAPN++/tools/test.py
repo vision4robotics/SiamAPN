@@ -12,7 +12,7 @@ import torch
 import numpy as np
 
 from pysot.models.model_builder_adapn import ModelBuilderADAPN
-from pysot.tracker.adsiamapn_tracker import ADSiamRPNTracker
+from pysot.tracker.adsiamapn_tracker import ADSiamAPNTracker
 from pysot.utils.bbox import get_axis_aligned_bbox
 from pysot.utils.model_load import load_pretrain
 from toolkit.datasets import DatasetFactory
@@ -41,7 +41,7 @@ def main():
     cfg.merge_from_file(args.config)
     model = ModelBuilderADAPN()
     model = load_pretrain(model, args.snapshot).cuda().eval()
-    tracker = ADSiamRPNTracker(model)
+    tracker = ADSiamAPNTracker(model)
 
     cur_dir = os.path.dirname(os.path.realpath(__file__))
     dataset_root = os.path.join(cur_dir, '../test_dataset', args.dataset)

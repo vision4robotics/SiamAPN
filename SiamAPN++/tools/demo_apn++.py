@@ -68,7 +68,7 @@ def main():
     model = load_pretrain(model, args.snapshot).eval().to(device)
 
     # build tracker
-    tracker = SiamAPNTracker(model, cfg.TRACK)
+    tracker = ADSiamAPNTracker(model, cfg.TRACK)
 
 
     first_frame = True

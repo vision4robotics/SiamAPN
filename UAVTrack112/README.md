@@ -52,3 +52,6 @@ Low Illumination: the illumination of surroundings is insufficient.
 Viewpoint Change: viewpoint affects target appearance significantly.
 
 Similar Object: there are objects of similar appearance near the target.
+
+
+**Note:** UAVTrack112_l is an aerial tracking benchmark for long-term tracking including 45 sequences. The annotation files are [available](https://pan.baidu.com/s/1YhDd_WwASe2Fc-1lyIfTPA) (code: z3f5).
